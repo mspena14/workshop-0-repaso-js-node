@@ -32,6 +32,9 @@ class NoteManager {
   }
 
   deleteNote(id) {
+    if (!(confirm('¿Estás seguro de eliminar esta tarea?'))) {
+      return
+  }
     this.notes = this.notes.filter((note) => note.id !== id);
     this.saveNotes();
     this.renderNotes();
@@ -78,6 +81,17 @@ class NoteManager {
     this.notes.forEach((note) => {
       const item = document.createElement("li");
 
+      const noteCheckbox = document.createElement('input')
+      noteCheckbox.setAttribute('type', 'checkbox')
+      noteCheckbox.name = note.id
+      noteCheckbox.id = note.id
+      noteCheckbox.checked = note.isImportant; // Establece el estado del checkbox
+      noteCheckbox.addEventListener("change", () => this.toggleNoteImportance(note.id));
+      
+      const labelCheckbox = document.createElement('label')
+      labelCheckbox.htmlFor = note.id
+      labelCheckbox.textContent = note.isImportant ? '¡Importante!' : 'Nota normal';
+
       if (note.isImportant) {
         const strongText = document.createElement("strong");
         strongText.textContent = note.description;
@@ -85,10 +99,6 @@ class NoteManager {
       } else {
         item.textContent = note.description;
       }
-
-
-      item.addEventListener("click", () => this.toggleNoteImportance(note.id));
-
       const deleteButton = document.createElement("button");
       deleteButton.textContent = "Eliminar";
       deleteButton.addEventListener("click", (e) => {
@@ -104,6 +114,8 @@ class NoteManager {
 
       item.appendChild(updateButton);
       item.appendChild(deleteButton);
+      item.appendChild(noteCheckbox);
+      item.appendChild(labelCheckbox)
       noteList.appendChild(item);
     });
   }

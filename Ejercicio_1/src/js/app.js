@@ -59,7 +59,6 @@ class TaskManager {
             const taskIntance = new Task(task.id, task.description, task.completed);
             taskIntance.toggleComplete();
             this.tasks = this.tasks.map(noToggledTask => (noToggledTask.id === id ? taskIntance : noToggledTask));
-            label.textContent = task.completed ? 'Completada' : 'Incompleta';
             this.saveTasks();
             this.renderTasks();
         } 
