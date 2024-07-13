@@ -11,7 +11,6 @@ const fetchPosts = () => {
             return response.json();
         })
         .then(posts => {
-            console.log(posts)
             displayPosts(posts);
         })
         .catch(error => {
@@ -24,11 +23,13 @@ const displayPosts = (posts) => {
     postList.innerHTML = '';
     posts.forEach(post => {
         const listItem = document.createElement('li');
+        const titleItem = document.createElement('h3');
         const textItem = document.createElement('p');
-        listItem.textContent = `Title: ${post.title}`;
+        titleItem.textContent = `Title: ${post.title}`;
         textItem.textContent =`Post: ${post.body}`;
+        listItem.appendChild(titleItem);
+        listItem.appendChild(textItem);
         postList.appendChild(listItem);
-        postList.appendChild(textItem);
     });
 };
 
