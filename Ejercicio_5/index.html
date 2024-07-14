@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Array Methods in JavaScript</title>
+  <link rel="stylesheet" href="./src/css/styles.css">
+</head>
+
+<body>
+  <section id="app">
+    <h1>Product's list</h1>
+    <button id="sum">Sum prices</button>
+    <button id="is-available">Availability</button>
+    <button id="list-product">List products</button>
+
+      <input type="search" id="search-input" placeholder="Search by name">
+      <button id="search-product">Search</button>
+  
+    <select name="select" id="category-select">
+      <option value="All" selected>All</option>
+      <option value="Clothing">Clothing</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Accessories">Accessories</option>
+    </select>
+
+    <div id="container" class="invisibility">
+
+    </div>
+
+    <table id="table">
+      <thead>
+        <tr>
+          <th scope="col">id</th>
+          <th scope="col">Categoria</th>
+          <th scope="col">Producto</th>
+          <th scope="col">Precio por Unidad</th>
+          <th scope="col">Cantidad</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+
+      </tbody>
+    </table>
+  </section>
+  <script src="./src/js/app.js"></script>
+</body>
+
+</html>
