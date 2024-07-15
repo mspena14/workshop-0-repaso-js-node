@@ -53,7 +53,7 @@ class TaskManager {
         this.renderTasks();
     }
 
-    toggleTaskComplete(id, label) {
+    toggleTaskComplete(id) {
         const task = this.tasks.find(task => task.id === id);
         if (task) {
             const taskIntance = new Task(task.id, task.description, task.completed);

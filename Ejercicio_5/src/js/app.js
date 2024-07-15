@@ -20,7 +20,7 @@ const toggleContainerClass = () => {
         container.classList.remove('invisibility');
         table.classList.add('invisibility');
     }
-}
+};
 
 const toggleTableClass = () => {
     if (table.classList.contains('invisibility')) {
