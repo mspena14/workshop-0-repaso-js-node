@@ -1,4 +1,4 @@
-# workshop-0-repaso-js-node
+# workshop-0-repaso-js-node Marlon Stiven Peña Naranjo
 # Workshop 0: Repasando JavaScript
 
 ## Introducción
@@ -1024,9 +1024,222 @@ fetchPosts(); // Cargar productos al cargar la página
 ## Punto 5
 
 ```` html
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+  <!-- Configuración básica -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Array Methods in JavaScript</title>
+  <!-- Estilos CSS -->
+  <link rel="stylesheet" href="./src/css/styles.css">
+</head>
+
+<body>
+  <section id="app">
+    <!-- Título principal -->
+    <h1>Product's list</h1>
+
+    <!-- Botones para activar diferentes funciones -->
+    <button id="sum">Sum prices</button>
+    <button id="is-available">Availability</button>
+    <button id="list-product">List products</button>
+
+    <!-- Búsqueda de productos por nombre -->
+    <input type="search" id="search-input" placeholder="Search by name">
+    <button id="search-product">Search</button>
+
+    <!-- Selección de categoría -->
+    <select name="select" id="category-select">
+      <option value="All" selected>All</option>
+      <option value="Clothing">Clothing</option>
+      <option value="Electronics">Electronics</option>
+      <option value="Accessories">Accessories</option>
+    </select>
+
+    <!-- Contenedor para mostrar diferentes vistas -->
+    <div id="container" class="invisibility">
+
+    </div>
+
+    <!-- Tabla para mostrar productos -->
+    <table id="table">
+      <thead>
+        <tr>
+          <th scope="col">id</th>
+          <th scope="col">Categoria</th>
+          <th scope="col">Producto</th>
+          <th scope="col">Precio por Unidad</th>
+          <th scope="col">Cantidad</th>
+        </tr>
+      </thead>
+      <tbody id="tbody">
+
+      </tbody>
+    </table>
+  </section>
+  <!-- Archivo JavaScript para la lógica de la aplicación -->
+  <script src="./src/js/app.js"></script>
+</body>
+
+</html>
 ````
 
 ```Javascript
+// Array de productos con sus atributos
+const products = [
+    { id: 1, name: 'Laptop', category: 'Electronics', price: 1500, stock: 20 },
+    { id: 2, name: 'Smartphone', category: 'Electronics', price: 800, stock: 20 },
+    { id: 3, name: 'Headphones', category: 'Electronics', price: 100, stock: 30 },
+    { id: 4, name: 'T-shirt', category: 'Clothing', price: 20, stock: 50 },
+    { id: 5, name: 'Jeans', category: 'Clothing', price: 50, stock: 40 },
+    { id: 6, name: 'Sneakers', category: 'Clothing', price: 80, stock: 30 },
+    { id: 7, name: 'Backpack', category: 'Accessories', price: 40, stock: 25 },
+    { id: 8, name: 'Watch', category: 'Accessories', price: 60, stock: 20 },
+    { id: 9, name: 'Sunglasses', category: 'Accessories', price: 30, stock: 35 }
+];
 
+// Elementos del DOM
+const container = document.getElementById('container'); // Contenedor principal
+const table = document.getElementById('table'); // Tabla de productos
+const tbody = document.getElementById('tbody'); // Cuerpo de la tabla
+const space = document.createElement('br'); // Elemento de espacio
+
+// Función para cambiar la visibilidad del contenedor y la tabla
+const toggleContainerClass = () => {
+    if (container.classList.contains('invisibility')) {
+        container.classList.remove('invisibility'); // Muestra el contenedor
+        table.classList.add('invisibility'); // Oculta la tabla
+    }
+};
+
+// Función para cambiar la visibilidad de la tabla y el contenedor
+const toggleTableClass = () => {
+    if (table.classList.contains('invisibility')) {
+        container.classList.add('invisibility'); // Oculta el contenedor
+        table.classList.remove('invisibility'); // Muestra la tabla
+    }
+};
+
+// Escucha de eventos para los botones de sumar precios, verificar disponibilidad y listar productos
+document.getElementById('sum').addEventListener('click', () => {
+    totalPrice(products); // Llama a la función para calcular el precio total
+});
+
+document.getElementById('is-available').addEventListener('click', () => {
+    checkAvailability(products); // Llama a la función para verificar disponibilidad
+});
+
+document.getElementById('list-product').addEventListener('click', () => {
+    createList(products); // Llama a la función para crear la lista de productos
+});
+
+// Escucha de evento para filtrar productos por categoría
+const filterOption = document.getElementById('category-select');
+filterOption.addEventListener('change', () => {
+    const category = filterOption.value; // Obtiene el valor seleccionado en el filtro de categoría
+    InfoFiltered(category); // Llama a la función para filtrar productos por categoría
+});
+
+// Escucha de evento para buscar productos por nombre
+document.getElementById('search-product').addEventListener('click', () => {
+    const wordToSearch = document.getElementById('search-input').value; // Obtiene el texto de búsqueda
+    InfoFound(wordToSearch); // Llama a la función para buscar productos por nombre
+});
+
+// Función para mostrar productos en la tabla
+const displayPosts = (products) => {
+    tbody.innerHTML = ''; // Limpia el contenido actual de la tabla
+    products.forEach(product => {
+        // Genera las filas de la tabla con los datos de cada producto
+        tbody.innerHTML += `
+        <tr>
+            <td scope="col">${product.id}</td>
+            <td scope="col">${product.category}</td>
+            <td scope="col">${product.name}</td>
+            <td scope="col">$${product.price}</td>
+            <td scope="col">${product.stock}</td>
+        </tr>
+        `;
+    });
+};
+
+// Función para calcular el precio total de todos los productos
+const totalPrice = (products) => {
+    toggleContainerClass(); // Cambia la visibilidad para mostrar el contenedor
+    container.innerHTML = ''; // Limpia el contenido actual del contenedor
+    const total = products.reduce((accumulator, product) => accumulator + product.price * product.stock, 0); // Calcula el total
+    const totalView = document.createElement('strong'); // Crea un elemento strong para mostrar el total
+    totalView.textContent = `Total price of all products: $${total}`; // Texto del total
+    container.append(space); // Añade un espacio antes del total
+    container.appendChild(totalView); // Añade el total al contenedor
+};
+
+// Función para filtrar productos por categoría seleccionada
+const InfoFiltered = (category) => {
+    toggleTableClass(); // Cambia la visibilidad para mostrar la tabla
+    if (!(category === 'All')) {
+        const resultsFiltered = products.filter((product) => product.category === category); // Filtra productos por categoría
+        displayPosts(resultsFiltered); // Muestra los productos filtrados en la tabla
+    } else {
+        displayPosts(products); // Muestra todos los productos si la categoría es 'All'
+    }
+};
+
+// Función para buscar productos por nombre
+const InfoFound = (wordToSearch) => {
+    toggleTableClass(); // Cambia la visibilidad para mostrar la tabla
+    if (wordToSearch) {
+        searchResults = products.filter((product) => product.name.toLowerCase().includes(wordToSearch.toLowerCase())); // Filtra productos por nombre
+        displayPosts(searchResults); // Muestra los productos encontrados en la tabla
+    }
+};
+
+// Función para verificar la disponibilidad de todos los productos
+const checkAvailability = (products) => {
+    toggleContainerClass(); // Cambia la visibilidad para mostrar el contenedor
+    container.textContent = ''; // Limpia el contenido actual del contenedor
+    const allAvailable = products.every(product => product.stock > 0); // Verifica si todos los productos están disponibles
+    if (allAvailable) {
+        const messageContainer = document.createElement('strong'); // Crea un elemento strong para el mensaje
+        messageContainer.textContent = 'All products are available.'; // Mensaje si todos los productos están disponibles
+        container.appendChild(space); // Añade un espacio antes del mensaje
+        container.appendChild(messageContainer); // Añade el mensaje al contenedor
+    } else {
+        const messageContainer = document.createElement('strong'); // Crea un elemento strong para el mensaje
+        messageContainer.textContent = 'Not all products are available.'; // Mensaje si no todos los productos están disponibles
+        container.appendChild(space); // Añade un espacio antes del mensaje
+        container.appendChild(messageContainer); // Añade el mensaje al contenedor
+    }
+};
+
+// Función para crear una lista de nombres de productos
+const createList = (products) => {
+    toggleContainerClass(); // Cambia la visibilidad para mostrar el contenedor
+    container.textContent = ''; // Limpia el contenido actual del contenedor
+    const productNames = products.map(product => product.name); // Obtiene los nombres de todos los productos
+    const listTitle = document.createElement('h3'); // Crea un elemento h3 para el título de la lista
+    const list = document.createElement('ul'); // Crea un elemento ul para la lista de nombres
+
+    productNames.forEach(productName => {
+        const listItem = document.createElement('li'); // Crea un elemento li para cada nombre de producto
+        list.appendChild(listItem); // Añade el elemento li a la lista ul
+        listItem.textContent = productName; // Asigna el nombre del producto al elemento li
+    });
+
+    listTitle.textContent = 'List of product names:'; // Texto del título de la lista
+    container.appendChild(listTitle); // Añade el título al contenedor
+    container.appendChild(list); // Añade la lista de nombres de productos al contenedor
+};
+
+// Mostrar todos los productos al cargar la página
+displayPosts(products);
+```
+
+```CSS
+/* Estilo para ocultar elementos */
+.invisibility {
+    display: none;
+}
 ```
